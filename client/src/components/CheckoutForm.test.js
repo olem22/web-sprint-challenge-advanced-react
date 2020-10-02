@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen, fireEvent, act  } from "@testing-library/react";
 import CheckoutForm from "./CheckoutForm";
 
 // Write up the two tests here and make sure they are testing what the title shows
@@ -7,12 +7,10 @@ test("Renders form without errors", () => {
     render(<CheckoutForm />);
   });
 
-  test("form header renders", async() => {
+  test("form header renders", () => {
     render(<CheckoutForm />);
-    const h2 = await screen.findByLabelText(/Checkout Form/i)
+    const h2 = screen.getByText(/Checkout Form/i)
     expect(h2).toBeInTheDocument()
-
-    //await act(async() => fireEvent.click(submitBtn))
 });
 
 test("form shows success message on submit with form details", async() => {
@@ -25,7 +23,6 @@ test("form shows success message on submit with form details", async() => {
     const stateInput = await screen.findByLabelText(/State:/i);
     const zipInput = await screen.findByLabelText(/Zip:/i);
 
-    
     fireEvent.change(firstNameInput, { target: { value: "Oleg" } });
     fireEvent.change(lastNameInput, { target: { value: "M" } });
     fireEvent.change(addressInput, { target: { value: "123 Street" } });
@@ -33,9 +30,8 @@ test("form shows success message on submit with form details", async() => {
     fireEvent.change(stateInput, { target: { value: "AA" } });
     fireEvent.change(zipInput, { target: { value: "12345" } });
 
-    
     const submitBtn = screen.getByRole("button", { name: /CHECKOUT/i });
    
-    // await act(async() => fireEvent.click(submitBtn))
+    await act(async() => fireEvent.click(submitBtn))
 });
 
